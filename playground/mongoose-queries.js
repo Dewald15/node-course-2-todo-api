@@ -39,4 +39,4 @@ User.findById(userID).then((user) => {
     console.log('User by ID: ', user);
 }).catch((e) => {
     console.log(e);
-})
+});
