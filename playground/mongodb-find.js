@@ -24,6 +24,8 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => { //takes 
         console.log('Unable to fetch Users', err)
     });
 
+    //Delete
+    //==============================================================================================
     //deleteMany
     db.collection('Users').deleteMany({
         text: 'Walk the dog'
@@ -32,6 +34,20 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => { //takes 
     });
     //deleteOne is the same as deleteMany, except it deletes only the fir
     //findOneAndDelete
+
+    //Update
+    //==============================================================================================
+
+    //findOneAndUpdate
+    db.collection('Users').findOneAndUpdate({
+        _id: new ObjectID('5a1bc6d6f0f91057543e1fda')
+    }, { $set:{
+        age: 28
+    }}, {
+        returnOriginal: false
+    }).then((result) => {
+        console.log(result);
+    })
 
     db.close();
 }); 
