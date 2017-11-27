@@ -7,22 +7,31 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => { //takes 
     console.log('Connected to MongoDB server');
 
     // //find returning array
-    // db.collection('Users').find({
-    //     _id: new ObjectID('5a1bc3a02272391d08ab4070')
-    // }).toArray().then((docs) => { //if find has no arguments, it will return all collections in specified document
-    //     console.log('Users');
-    //     console.log(JSON.stringify(docs, undefined, 2));
-    // }, (err) => {
-    //     console.log('Unable to fetch Users', err)
-    // });
+    db.collection('Users').find({
+        _id: new ObjectID('5a1bc3a02272391d08ab4070')
+    }).toArray().then((docs) => { //if find has no arguments, it will return all collections in specified document
+        console.log('Users');
+        console.log(JSON.stringify(docs, undefined, 2));
+    }, (err) => {
+        console.log('Unable to fetch Users', err)
+    });
 
-    
+    // counting 
     db.collection('Users').find().count().then((docs) => { //if find has no arguments, it will return all collections in specified document
         console.log('Users');
         console.log(JSON.stringify(docs, undefined, 2));
     }, (err) => {
         console.log('Unable to fetch Users', err)
     });
+
+    //deleteMany
+    db.collection('Users').deleteMany({
+        text: 'Walk the dog'
+    }).then((result) => {
+        console.log(result);
+    });
+    //deleteOne is the same as deleteMany, except it deletes only the fir
+    //findOneAndDelete
 
     db.close();
 }); 
