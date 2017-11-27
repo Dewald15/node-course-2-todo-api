@@ -5,16 +5,16 @@ const {app} = require('./../server');
 const {Todo} = require('./../models/todo');
 
 beforeEach((done) =>{
-    Todo.remove({}).then(() => done());
+    Todo.remove({}).then(() => done()); //{} will wipe all of our todos
 });
 
 describe('POST /todos', () => {
     it('should create a new todo', (done) => {
         var text = 'Test todo text';
 
-        request(app)
+        request(app) //using supertest
         .post('/todos')
-        .send({text})
+        .send({text}) //object will be converted to JSON by supertest
         .expect(200)
         .expect((res) =>{
             expect(res.body.text).toBe(text);
@@ -23,7 +23,6 @@ describe('POST /todos', () => {
             if(err){
                 return done(err);
             }
-
             Todo.find().then((todos) => {
                 expect(todos.length).toBe(1);
                 expect(todos[0].text).toBe(text);
