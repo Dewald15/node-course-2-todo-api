@@ -1,5 +1,7 @@
 //server.js will only be responsible for our routes
 //lib imports
+require('./config/config');
+
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser'); //takes json and convert it to an object attaching it on the request object in post
@@ -11,7 +13,7 @@ var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 
 var app = express();
-const port = process.env.PORT || 3000; //PORT will be set if the app is running on heroku, and will not be set if its running locally
+const port = process.env.PORT; //PORT will be set if the app is running on heroku for production
 
 app.use(bodyParser.json()); //app.use takes the middleware. If we're writing custom middleware it will take the function, if we use 3rd party middleware, we can access it from its lib
 
