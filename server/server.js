@@ -10,6 +10,7 @@ var {User} = require('./models/user');
 const {ObjectID} = require('mongodb');
 
 var app = express();
+const port = process.env.PORT || 3000; //PORT will be set if the app is running on heroku, and will not beset if its running locally
 
 app.use(bodyParser.json()); //app.use takes the middleware. If we're writing custom middleware it will take the function, if we use 3rd party middleware, we can access it from its lib
 
@@ -58,8 +59,8 @@ app.get('/todos/:id', (req, res) => {
     })
 })
 
-app.listen(3000, () => {
-    console.log('Started on port 3000');
+app.listen(port, () => {
+    console.log(`Started on port ${port}`);
 });
 
 module.exports = {
