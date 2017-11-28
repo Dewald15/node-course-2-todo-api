@@ -10,7 +10,7 @@ var {User} = require('./models/user');
 const {ObjectID} = require('mongodb');
 
 var app = express();
-const port = process.env.PORT || 3000; //PORT will be set if the app is running on heroku, and will not beset if its running locally
+const port = process.env.PORT || 3000; //PORT will be set if the app is running on heroku, and will not be set if its running locally
 
 app.use(bodyParser.json()); //app.use takes the middleware. If we're writing custom middleware it will take the function, if we use 3rd party middleware, we can access it from its lib
 
@@ -71,7 +71,7 @@ app.delete('/todos/:id', (req, res) => {
             return res.status(404).send();
         }
 
-        res.send(todo);
+        res.send({todo});
 
     }).catch((e) => {
         res.status(400).send();
