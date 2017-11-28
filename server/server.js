@@ -11,7 +11,7 @@ const {ObjectID} = require('mongodb');
 
 var app = express();
 
-app.use(bodyParser.json()); //app.use takes the middleware. If were writing custom middleware it will take the function, if we use 3rd party middleware, we can access it from its lib
+app.use(bodyParser.json()); //app.use takes the middleware. If we're writing custom middleware it will take the function, if we use 3rd party middleware, we can access it from its lib
 
 app.post('/todos', (req, res) => {
     var todo = new Todo({
