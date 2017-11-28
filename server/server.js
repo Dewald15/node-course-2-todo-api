@@ -1,13 +1,14 @@
 //server.js will only be responsible for our routes
 //lib imports
-var express = require('express');
-var bodyParser = require('body-parser'); //takes json and convert it to an object attaching it on the request object in post
+const _ = require('lodash');
+const express = require('express');
+const bodyParser = require('body-parser'); //takes json and convert it to an object attaching it on the request object in post
+const {ObjectID} = require('mongodb');
 
 //local imports
 var {mongoose} = require('./db/mongoose'); //this syntax is same as 'var mongoose = require('./db/mongoose').mongoose;'
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
-const {ObjectID} = require('mongodb');
 
 var app = express();
 const port = process.env.PORT || 3000; //PORT will be set if the app is running on heroku, and will not be set if its running locally
@@ -76,6 +77,31 @@ app.delete('/todos/:id', (req, res) => {
     }).catch((e) => {
         res.status(400).send();
     });
+});
+
+app.patch('/todos/:id', (req, res) => {
+    var id = req.params.id;
+    var body = _.pick(req.body, ['text', 'completed']); //this is a subset of the things the user passed to us, we dont want the user to update anything they choose
+
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send();
+    }
+
+    if(_.isBoolean(body.completed) && body.completed){
+        body.completedAt = new Date().getTime();
+    }else{
+        body.completed = false;
+        body.completedAt = null;
+    }
+
+    Todo.findByIdAndUpdate(id, {$set:body}, {new: true}).then((todo) => { //body is var arr above
+        if(!todo){
+            return res.status(404).send();
+        }
+        res.send({todo});
+    }).catch((e) => {
+        res.status(400).send();
+    })
 });
 
 app.listen(port, () => {
