@@ -58,7 +58,7 @@ UserSchema.methods.generateAuthToken = function() { //UserSchema.methods is an o
 };
 
 UserSchema.statics.findByToken = function (token){ //everything you add on to 'UserSchema.statics' turns into a model method instead of an instance method like 'UserSchema.methods'
-    var User = this;    // instance methods gets called with the individual document like 'generateAuthToken' function above, model methods gets called with the model as the this binding
+    var User = this;    // instance methods gets called with the individual document like 'generateAuthToken' function above, model methods gets called with the model as the 'this binding'
     var decoded;
 
     try{
@@ -77,6 +77,26 @@ UserSchema.statics.findByToken = function (token){ //everything you add on to 'U
         'tokens.access': 'auth'
     });
 };
+
+UserSchema.statics.findByCredentials = function (email, password){
+    var User = this;
+
+    return User.findOne({email}).then((user) => {
+        if(!user){
+            return Promise.reject();
+        }
+
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(password, user.password, (err, res) => {
+                if(res){
+                    resolve(user);
+                }else{
+                    reject();
+                }
+            });
+        });
+    });
+}
 
 UserSchema.pre('save', function(next){
     var user = this;
