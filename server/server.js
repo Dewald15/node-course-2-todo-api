@@ -106,6 +106,22 @@ app.patch('/todos/:id', (req, res) => {
     })
 });
 
+    app.post('/users', (req, res) => {
+        var body = _.pick(req.body, ['email', 'password']); //1st argument: object we want to pick from, 2nd argument is an array of properties we want to pick of
+        var user = new User(body);
+
+        // User    //model method
+        // user    //instance methods
+
+        user.save().then(() => {    //save() will attempt to save the document to the database
+            return user.generateAuthToken();
+        }).then((token) => {
+            res.header('x-auth', token).send(user); // 'x-' means you are creating a custom header, hwich means it's not a header http supports by default, it's a heading you are using for specific purposes
+        }).catch((e) => {
+            res.status(400).send(e);
+        })
+    });
+
 app.listen(port, () => {
     console.log(`Started on port ${port}`);
 });
