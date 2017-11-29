@@ -56,6 +56,27 @@ UserSchema.methods.generateAuthToken = function() { //UserSchema.methods is an o
     });
 };
 
+UserSchema.statics.findByToken = function (token){ //everything you add on to 'UserSchema.statics' turns into a model method instead of an instance method like 'UserSchema.methods'
+    var User = this;    // instance methods gets called with the individual document like 'generateAuthToken' function above, model methods gets called with the model as the this binding
+    var decoded;
+
+    try{
+        decoded = jwt.verify(token, 'abc123');
+    }catch(e){
+        // return new Promise((resolve, reject) => {
+        //     reject();
+        // });
+        //code above is same as below
+        return Promise.reject();
+    };
+
+    return User.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
+    });
+};
+
 var User = mongoose.model('User', UserSchema);
 
 module.exports = {
