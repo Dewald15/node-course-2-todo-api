@@ -57,6 +57,20 @@ UserSchema.methods.generateAuthToken = function() { //UserSchema.methods is an o
     });
 };
 
+UserSchema.methods.removeToken = function(token) {
+    var user = this;
+
+    return user.update({
+        $pull: {    //$pull lets you remove items from an array that match certain criteria 
+            tokens: {token}
+            //below same as line above
+            // tokens: {
+            //     token: token
+            // }
+        }
+    });
+};
+
 UserSchema.statics.findByToken = function (token){ //everything you add on to 'UserSchema.statics' turns into a model method instead of an instance method like 'UserSchema.methods'
     var User = this;    // instance methods gets called with the individual document like 'generateAuthToken' function above, model methods gets called with the model as the 'this binding'
     var decoded;
