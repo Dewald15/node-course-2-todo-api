@@ -48,7 +48,7 @@ UserSchema.methods.toJSON = function() { //this method which we will define as a
 UserSchema.methods.generateAuthToken = function() { //UserSchema.methods is an object. You can add any method you like to it, which is called instance methods which do have access to the individual doc
     var user = this;
     var access = 'auth';
-    var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString(); //ES6: access is the same as access: access 
+    var token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET).toString(); //ES6: access is the same as access: access 
 
     user.tokens.push({access, token}); //push new object to array, this is updating local user model, still need to save it
 
@@ -76,7 +76,7 @@ UserSchema.statics.findByToken = function (token){ //everything you add on to 'U
     var decoded;
 
     try{
-        decoded = jwt.verify(token, 'abc123');
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
     }catch(e){
         // return new Promise((resolve, reject) => {
         //     reject();
