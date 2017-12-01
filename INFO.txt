@@ -1,0 +1,6 @@
+run local server: 
+    node server/server.js
+run database server: In C:\Users\Dewald\mongo-data, From bin dir in cmd, run command:
+    mongod.exe --dbpath C:\Users\Dewald\mongo-data
+
+heroku url: https://dashboard.heroku.com/apps/nameless-atoll-58017/deploy/heroku-git
